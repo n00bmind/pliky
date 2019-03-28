@@ -1,0 +1,5 @@
+@echo off
+set VENV=C:\dev\pk-env
+
+%VENV%\Scripts\activate.bat
+
