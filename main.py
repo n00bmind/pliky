@@ -87,10 +87,21 @@ def execute_entry(path):
         return
 
     printf(HTML(f'<gray>> {path}</gray>'))
+
+    is_file = not os.path.isdir(path)
+    dir_name = os.path.dirname(path)
     try:
+        if is_file:
+            cwd = os.getcwd()
+            os.chdir(dir_name)
+
         # TODO Handle paths with spaces
         prefix = 'start ' if os.name == 'nt' else 'open '
         retcode = subprocess.run(prefix + str(path), shell=True)
+
+        if is_file:
+            os.chdir(cwd)
+
     except OSError as e:
         print(f'Execution failed: {e}')
 
