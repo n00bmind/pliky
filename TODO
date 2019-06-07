@@ -1,0 +1,7 @@
+
+- Add support for some kind of form-based editing on entries, to allow adding description/documentation snippets for each entry
+- Maybe convert the app to a (Im)GUI app? (keeping the prompt-toolkit for the input if possible)
+- Add a second type of entry which is not a file/command: documentation snippets (notes) to document lesser used project features & knowledge gems that can be easily searched later, with a context (category), tags, small description, links to other entries
+    and an optional URL(s) field pointing to additional documentation
+- Add a new directive #find which uses ripgrep if available to make file & content searches in the project, as Windows' search sucks in too many ways to even count
+- Add an optional line number to (text) file entries, which will allow for opening text files at that line directly (very useful for code)

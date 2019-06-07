@@ -1,3 +1,5 @@
 /activate.bat
 /last_session.vim
 *.swp
+__pycache__
+
