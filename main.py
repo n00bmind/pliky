@@ -19,8 +19,8 @@ def _glfw_init(width=0, height=0):
         print("Could not initialize OpenGL context")
         exit(1)
 
+    mode = glfw.get_video_mode(glfw.get_primary_monitor())
     if width == 0 or height == 0:
-        mode = glfw.get_video_mode(glfw.get_primary_monitor())
         width = mode.size.width / 2 if width == 0 else width
         height = mode.size.height / 2 if height == 0 else height
 
@@ -37,12 +37,17 @@ def _glfw_init(width=0, height=0):
     window = glfw.create_window(int(width), int(height), window_name, None, None)
     glfw.make_context_current(window)
 
-    if not window:
+    if window:
+        glfw.set_window_pos(window, int((mode.size.width - width) / 2), int((mode.size.height - height) / 2))
+    else:
         glfw.terminate()
         print("Could not initialize Window")
         exit(1)
 
     return window
+
+
+
 
 
 
@@ -67,6 +72,24 @@ def main():
     imgui.create_context()
     window = _glfw_init(500, 1000)
     renderer = GlfwRenderer(window)
+
+    __main_locals_marker = None
+    def on_glfw_key(window, key, scancode, action, mods):
+        renderer.keyboard_callback(window, key, scancode, action, mods)
+
+        if action == glfw.RELEASE:
+            if key in (glfw.KEY_PAUSE, glfw.KEY_SCROLL_LOCK):
+                # Pretty slow I assume, but reliable
+                frame = inspect.currentframe()
+                while frame:
+                    if '__main_locals_marker' in frame.f_locals:
+                        break
+                    frame = frame.f_back
+
+                ipshell(local_ns=frame.f_locals)
+
+    # Need to set this after creating the renderer because by default it does its own hooks
+    glfw.set_key_callback(window, on_glfw_key)
 
     #  TODO 
     state = State()
